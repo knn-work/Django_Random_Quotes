@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+
+<section class="col-md-9">
+    <h3>Цитата</h3>
+<table border="solid black">
+    <tr>
+        <th>Тип источника</th>
+        <th>Источник</th>
+        <th>Текст цитаты</th>
+        <th>Вес цитаты</th>
+        <th>Просмотры</th>
+    </tr>
+
+{% for quote in quotes %}
+   <tr>
+        <td>{{quote.source.type}}</td>
+        <td>{{quote.source.label}}</td>
+        <td>{{quote.text}}</td>
+        <td>{{quote.weight}}</td>
+        <td>{{quote.view_count}}</td>
+    </tr>
+{% endfor %}
+    </table>
+
+</section>
+{% endblock main %}
