@@ -7,15 +7,33 @@
     <h3>Цитата</h3>
 <table border="solid black">
     <tr>
-        <th>Тип источника</th>
-        <th>Источник</th>
-        <th>Текст цитаты</th>
-        <th>Вес цитаты</th>
-        <th>Просмотры</th>
-    </tr>
+    {% for header_name, value in headers.items %}
+        <th>
+            {{header_name}}
+            {% if value == sort_by %}
+                    {% if direction == 'desc' %}
+                    <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=asc" style="color: red">
+                        V
+                    </a>
+                    {% else %}
+                    <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=desc" style="color: red">
+                        A
+                    </a>
+                    {% endif %}
+
+            {% else %}
+                 <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=desc" style="color: blue">
+                     V
+                 </a>
+            {% endif %}
+        </th>
+
+    {% endfor %}
+
 
 {% for quote in quotes %}
    <tr>
+        <td>{{quote.pk}}</td>
         <td>{{quote.source.type}}</td>
         <td>{{quote.source.label}}</td>
         <td>{{quote.text}}</td>
@@ -24,6 +42,8 @@
     </tr>
 {% endfor %}
     </table>
-
+<div>
+    {{debug}}
+</div>
 </section>
 {% endblock main %}
