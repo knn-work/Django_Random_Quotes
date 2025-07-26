@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -16,6 +17,15 @@ class Quote(models.Model):
     text = models.TextField(unique=True)
     weight = models.PositiveIntegerField(default=1)
     view_count = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        count = Quote.objects.filter(source=self.source).count()
+        if count > 3:
+            raise ValidationError(
+                f"Уже существует максимум допустимых цитат ({count }) из этого источника."
+            )
+
+        super().save(*args, **kwargs)
 
     def increment_view_count(self):
         self.view_count += 1

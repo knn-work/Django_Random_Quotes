@@ -1,41 +1,20 @@
-from django.db import models
+from django.contrib import admin
+
+from quotes.models import Source, SourceType
 
 
-class Source(models.Model):
-    """
-    Представляет источник цитаты (например, фильм, книга и др.)
-
-    Attributes:
-        type (ForeignKey): Тип источника (связан с моделью SourceType).
-        label (CharField): Название источника (например, название фильма или книги).
-
-    """
-
-    type = models.ForeignKey("SourceType", on_delete=models.PROTECT)
-    label = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = "источник"
-        verbose_name_plural = "источники"
-
-    def __str__(self):
-        return self.label
+@admin.register(SourceType)
+class SourceTypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
 
-class SourceType(models.Model):
-    """
-    Описывает различные типы источников цитат (например, кино, литература и т.д.)
 
-    Attributes:
-        name (CharField): Название типа источника (например, "Фильм", "Книга").
+@admin.register(Source)
+class SourceAdmin(admin.ModelAdmin):
+    list_display = ('label', 'type')      # отображаемые поля
+    search_fields = ('label', 'type__name')  # поиск по названию и типу
+    list_filter = ('type',)               # фильтр по типу источника
+    ordering = ('label',)                 # сортировка по названию
 
-    """
 
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name = "тип источника"
-        verbose_name_plural = "типы источников"
-
-    def __str__(self):
-        return self.name

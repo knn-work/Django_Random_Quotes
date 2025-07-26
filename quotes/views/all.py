@@ -1,8 +1,6 @@
 from django.shortcuts import render
 
-from quotes.models import Source, Quote
-
-
+from quotes.models import Quote
 
 
 def all_quotes(request):
@@ -30,6 +28,6 @@ def all_quotes(request):
             'headers':headers,
             'sort_by':sort_by,
             'direction':direction,
-            'debug':request,
+            # 'debug':request,
         },
     )

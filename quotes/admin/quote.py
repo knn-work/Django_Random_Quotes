@@ -1,29 +1,38 @@
-from django.db import models
+from django.contrib import admin
+from django.db.models import Count
+
+from quotes.models import Quote, Source
 
 
-class Quote(models.Model):
-    """
-    Модель представления цитат.
+@admin.register(Quote)
+class QuoteAdmin(admin.ModelAdmin):
+    list_display = ("text_preview", "source", "weight", "view_count")
+    search_fields = ("text", "source__name")  #
+    list_filter = ("source",)  # Фильтрация по источникам цитат
+    ordering = ("-weight",)
+    readonly_fields = ("view_count",)
+    fields = ("source", "text", "weight", "view_count")
 
-    Attributes:
-        source (ForeignKey): Источник цитаты (связан с моделью Source).
-        text (TextField): Текст цитаты, уникален среди всех цитат.
-        weight (PositiveIntegerField): Целочисленный показатель веса цитаты, влияет на вероятность отображения.
-        view_count (PositiveIntegerField): Количество просмотров цитаты.
-    """
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "source":
+            kwargs["queryset"] = Source.objects.annotate(
+                quote_count=Count("quote")
+            ).filter(quote_count__lt=3)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    source = models.ForeignKey("Source", on_delete=models.CASCADE)
-    text = models.TextField(unique=True)
-    weight = models.PositiveIntegerField(default=1)
-    view_count = models.PositiveIntegerField(default=0)
+    def text_preview(self, obj):
+        """Метод возвращает сокращённый текст цитаты."""
+        return obj.text[:50]
 
-    def increment_view_count(self):
-        self.view_count += 1
-        self.save(update_fields=["view_count"])
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.select_related("source")
 
-    class Meta:
-        verbose_name = "цитата"
-        verbose_name_plural = "цитаты"
+    def has_add_permission(self, request):
+        return request.user.is_superuser or request.user.has_perm("quotes.add_quote")
 
-    def __str__(self):
-        return f"{self.text[:50]}..."
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.has_perm("quotes.change_quote")
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser or request.user.has_perm("quotes.delete_quote")
