@@ -2,48 +2,54 @@
 
 {% block main %}
 
-
 <section class="col-md-9">
-    <h3>Цитата</h3>
-<table border="solid black">
-    <tr>
-    {% for header_name, value in headers.items %}
-        <th>
-            {{header_name}}
-            {% if value == sort_by %}
-                    {% if direction == 'desc' %}
-                    <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=asc" style="color: red">
-                        V
-                    </a>
-                    {% else %}
-                    <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=desc" style="color: red">
-                        A
-                    </a>
-                    {% endif %}
+    <h3>Цитаты</h3>
+    <table class="table table-bordered table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                {% for header_name, value in headers.items %}
+                    <th scope="col">
+                        {{ header_name }}
 
-            {% else %}
-                 <a href="{% url 'all_quotes' %}?sort_by={{value}}&direction=desc" style="color: blue">
-                     V
-                 </a>
-            {% endif %}
-        </th>
-
-    {% endfor %}
-
-
-{% for quote in quotes %}
-   <tr>
-        <td>{{quote.pk}}</td>
-        <td>{{quote.source.type}}</td>
-        <td>{{quote.source.label}}</td>
-        <td>{{quote.text}}</td>
-        <td>{{quote.weight}}</td>
-        <td>{{quote.view_count}}</td>
-    </tr>
-{% endfor %}
+                        {% if value == sort_by %}
+                            {% if direction == 'desc' %}
+                                <a href="{% url 'all_quotes' %}?sort_by={{ value }}&direction=asc" class="text-danger">
+                                    ↓
+                                </a>
+                            {% else %}
+                                <a href="{% url 'all_quotes' %}?sort_by={{ value }}&direction=desc" class="text-danger">
+                                    ↑
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'all_quotes' %}?sort_by={{ value }}&direction=desc" class="text-primary">
+                                ↓
+                            </a>
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for quote in quotes %}
+                <tr>
+                    <td>{{ quote.pk }}</td>
+                    <td>{{ quote.source.type }}</td>
+                    <td>{{ quote.source.label }}</td>
+                    <td>{{ quote.text }}</td>
+                    <td>{{ quote.weight }}</td>
+                    <td>{{ quote.view_count }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Нет данных.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
-<div>
-    {{debug}}
-</div>
+    <div>
+        {{ debug }}
+    </div>
 </section>
+
 {% endblock main %}

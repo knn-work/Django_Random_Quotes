@@ -2,17 +2,42 @@
 
 {% block main %}
 
+<section class="col-md-9 py-5">
+    <div class="card shadow-sm p-4 rounded-3">
+        <div class="card-header text-center fs-3 fw-bold">
+            "{{ quote.text }}"
+        </div>
+        <div class="card-body">
+            <p class="lead mb-3">
+                Источник: <strong>{{ quote.source.label }} ({{ quote.source.type }})</strong>
+            </p>
+            <p class="mb-3">
+                Вес цитаты: <strong>{{ quote.weight }}</strong>
+            </p>
 
-<section class="col-md-9">
-    <div class="center">
-        <h1>"{{quote.text}}"</h1>
+
+            <hr />
+
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <div class="btn-group btn-group-sm mr-2" role="group">
+                    <form method="POST" action="{% url 'add_like' pk=quote.id %}" style="display: inline-block;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">❤️</button>
+                    </form>
+
+                    <form method="POST" action="{% url 'add_dislike' pk=quote.id %}" style="display: inline-block;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn ">💔</button>
+                    </form>
+
+                </div>
+                    <p class="mb-3">
+                        👁️‍🗨️ <strong>{{ quote.view_count }}</strong>
+                    </p>
+
+            </div>
+        </div>
     </div>
-    <ul>
-        <li>Источник:{{quote.source.label}}({{quote.source.type}}) </li>
-        <li>Вес цитаты:{{quote.weight}}</li>
-        <li>Просмотры:{{quote.view_count}}</li>
-    </ul>
-
-
 </section>
+
 {% endblock main %}
