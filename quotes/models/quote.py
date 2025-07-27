@@ -42,11 +42,12 @@ class Quote(models.Model):
         return self.grades.filter(grade=Grade.DISLIKE).count()
 
     def voted_by_user(self, user):
-        """Определяет, какое действие совершил пользователь (лайк, дизлайк или ничего)"""
-        grades = self.grades.filter(user=user)
-        if grades.exists():
-            return grades.first().grade
-        return None
+        """Определяем, какая оценка была поставлена пользователем"""
+        try:
+            grade = self.grades.get(user=user)
+            return grade.grade
+        except Grade.DoesNotExist:
+            return None
 
     class Meta:
         verbose_name = "цитата"

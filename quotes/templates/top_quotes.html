@@ -14,8 +14,9 @@
         <tbody>
             {% for quote in top_quotes %}
             <tr>
-                <td>{{ forloop.counter }}.</td> <!-- Используем встроенный цикл counter -->
-                <td>{{ quote.text }}</td>
+                <td>{{ forloop.counter }}.</td>
+                <td><a href="quote/{{quote.pk}}">{{ quote.text }}</a></td>
+
                 <td>{{ quote.num_likes }}</td>
             </tr>
             {% empty %}
