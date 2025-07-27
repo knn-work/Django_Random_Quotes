@@ -9,6 +9,8 @@ from quotes.models import Quote
 
 def random_quotes(request):
     quote:Quote = __get_random_quote()
+    if quote is None:
+        return redirect(f"/all")
     return redirect(f"/quote/{quote.pk}")
 
 # Функция обновления суммарного веса
@@ -20,7 +22,7 @@ def update_total_weight():
 
 
 # Функция получения рандомной цитаты
-def __get_random_quote() -> Quote:
+def __get_random_quote() -> Quote | None:
     # Сначала попытаемся достать общий вес из кэша
     total_weight = cache.get('total_weight')
 
@@ -38,4 +40,4 @@ def __get_random_quote() -> Quote:
         if current_point + quote.weight >= random_point:
             return quote
         current_point += quote.weight
-    raise Exception("Критическая ошибка")
+    return None
