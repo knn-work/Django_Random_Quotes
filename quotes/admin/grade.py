@@ -5,11 +5,11 @@ from quotes.models import Grade
 
 @admin.register(Grade)
 class GradeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'quote', 'grade')
-    list_filter = ('grade', )
-    ordering = ('-pk', )
-    raw_id_fields = ('user', 'quote')
+    list_display = ("user", "quote", "grade")
 
+    list_filter = ("grade",)
+    ordering = ("-pk",)
+    raw_id_fields = ("user", "quote")
 
     def has_add_permission(self, request):
         return False

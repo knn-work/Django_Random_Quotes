@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container my-5">
+    <h1 class="text-center">Топ-10 цитат по лайкам</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Текст цитаты</th>
+                <th scope="col">Количество лайков</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quote in top_quotes %}
+            <tr>
+                <td>{{ forloop.counter }}.</td> <!-- Используем встроенный цикл counter -->
+                <td>{{ quote.text }}</td>
+                <td>{{ quote.num_likes }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">Нет цитат в рейтинге.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

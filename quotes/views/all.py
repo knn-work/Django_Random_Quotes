@@ -11,6 +11,8 @@ def all_quotes(request):
         "Текст цитаты":"text",
         "Вес цитаты":"weight",
         "Просмотры":"view_count",
+        "❤️":"",
+        "💔":"",
     }
     sort_by = request.GET.get("sort_by")
     direction = request.GET.get("direction",'asc')

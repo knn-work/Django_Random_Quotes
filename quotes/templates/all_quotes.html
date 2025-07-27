@@ -11,7 +11,7 @@
                     <th scope="col">
                         {{ header_name }}
 
-                        {% if value == sort_by %}
+                        {% if value == sort_by and value != "" %}
                             {% if direction == 'desc' %}
                                 <a href="{% url 'all_quotes' %}?sort_by={{ value }}&direction=asc" class="text-danger">
                                     ↓
@@ -21,7 +21,7 @@
                                     ↑
                                 </a>
                             {% endif %}
-                        {% else %}
+                        {% elif value != sort_by and value != "" %}
                             <a href="{% url 'all_quotes' %}?sort_by={{ value }}&direction=desc" class="text-primary">
                                 ↓
                             </a>
@@ -33,12 +33,14 @@
         <tbody>
             {% for quote in quotes %}
                 <tr>
-                    <td>{{ quote.pk }}</td>
+                    <td><a href="quote/{{quote.pk}}">{{ quote.pk }}</a></td>
                     <td>{{ quote.source.type }}</td>
-                    <td>{{ quote.source.label }}</td>
+                    <td><a href="source/{{quote.source.pk}}">{{ quote.source.label }}</a></td>
                     <td>{{ quote.text }}</td>
                     <td>{{ quote.weight }}</td>
                     <td>{{ quote.view_count }}</td>
+                    <td>{{ quote.likes }}</td>
+                    <td>{{ quote.dislikes }}</td>
                 </tr>
             {% empty %}
                 <tr>

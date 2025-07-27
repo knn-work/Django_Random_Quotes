@@ -22,12 +22,12 @@
                 <div class="btn-group btn-group-sm mr-2" role="group">
                     <form method="POST" action="{% url 'add_like' pk=quote.id %}" style="display: inline-block;">
                         {% csrf_token %}
-                        <button type="submit" class="btn">❤️</button>
+                        <button type="submit" class="btn">{{quote.likes}}❤️</button>
                     </form>
 
                     <form method="POST" action="{% url 'add_dislike' pk=quote.id %}" style="display: inline-block;">
                         {% csrf_token %}
-                        <button type="submit" class="btn ">💔</button>
+                        <button type="submit" class="btn ">{{quote.dislikes}}💔</button>
                     </form>
 
                 </div>

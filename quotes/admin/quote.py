@@ -6,7 +6,14 @@ from quotes.models import Quote, Source
 
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
-    list_display = ("text_preview", "source", "weight", "view_count")
+    list_display = (
+        "text_preview",
+        "source",
+        "weight",
+        "view_count",
+        "likes",
+        "dislikes",
+    )
     search_fields = ("text", "source__name")  #
     list_filter = ("source",)  # Фильтрация по источникам цитат
     ordering = ("-weight",)
@@ -21,7 +28,6 @@ class QuoteAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def text_preview(self, obj):
-        """Метод возвращает сокращённый текст цитаты."""
         return obj.text[:50]
 
     def get_queryset(self, request):

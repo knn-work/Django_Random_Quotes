@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from quotes.models import Grade
+
 
 class Quote(models.Model):
     """
@@ -30,6 +32,21 @@ class Quote(models.Model):
     def increment_view_count(self):
         self.view_count += 1
         self.save(update_fields=["view_count"])
+
+    def likes(self) -> int:
+        """Возвращает количество лайков"""
+        return self.grades.filter(grade=Grade.LIKE).count()
+
+    def dislikes(self):
+        """Возвращает количество дизлайков"""
+        return self.grades.filter(grade=Grade.DISLIKE).count()
+
+    def voted_by_user(self, user):
+        """Определяет, какое действие совершил пользователь (лайк, дизлайк или ничего)"""
+        grades = self.grades.filter(user=user)
+        if grades.exists():
+            return grades.first().grade
+        return None
 
     class Meta:
         verbose_name = "цитата"

@@ -21,7 +21,7 @@ class Grade(models.Model):
     GRADE_CHOICES = [(LIKE, "Лайк"), (DISLIKE, "Дизлайк")]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    quote = models.ForeignKey("Quote", on_delete=models.CASCADE)
+    quote = models.ForeignKey("Quote", on_delete=models.CASCADE, related_name="grades")
     grade = models.SmallIntegerField(choices=GRADE_CHOICES)
 
     class Meta:
