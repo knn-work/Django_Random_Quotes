@@ -1,5 +1,7 @@
 from quotes.views.add_dislike import AddDislike
 from quotes.views.add_like import AddLike
+from quotes.views.add_quote import add_quote
+from quotes.views.add_source import AddSourceView
 from quotes.views.all import all_quotes
 from quotes.views.quote import quote
 from quotes.views.random import random_quotes

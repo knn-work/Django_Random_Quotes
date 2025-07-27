@@ -13,11 +13,9 @@ def random_quotes(request):
         return redirect(f"/all")
     return redirect(f"/quote/{quote.pk}")
 
-# Функция обновления суммарного веса
+
 def update_total_weight():
-    # Получаем актуальные данные из базы
     total_weight = Quote.objects.all().aggregate(total=Sum('weight'))['total'] or 0
-    # Сохраняем результат в кэш
     cache.set('total_weight', total_weight)
 
 

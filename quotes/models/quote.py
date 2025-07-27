@@ -34,11 +34,9 @@ class Quote(models.Model):
         self.save(update_fields=["view_count"])
 
     def likes(self) -> int:
-        """Возвращает количество лайков"""
         return self.grades.filter(grade=Grade.LIKE).count()
 
     def dislikes(self):
-        """Возвращает количество дизлайков"""
         return self.grades.filter(grade=Grade.DISLIKE).count()
 
     def voted_by_user(self, user):

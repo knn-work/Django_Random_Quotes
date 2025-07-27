@@ -14,8 +14,8 @@ class QuoteAdmin(admin.ModelAdmin):
         "likes",
         "dislikes",
     )
-    search_fields = ("text", "source__name")  #
-    list_filter = ("source",)  # Фильтрация по источникам цитат
+    search_fields = ("text", "source__name")
+    list_filter = ("source",)
     ordering = ("-weight",)
     readonly_fields = ("view_count",)
     fields = ("source", "text", "weight", "view_count")
@@ -33,12 +33,3 @@ class QuoteAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.select_related("source")
-
-    def has_add_permission(self, request):
-        return request.user.is_superuser or request.user.has_perm("quotes.add_quote")
-
-    def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.has_perm("quotes.change_quote")
-
-    def has_delete_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.has_perm("quotes.delete_quote")

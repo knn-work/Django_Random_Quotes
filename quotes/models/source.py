@@ -12,7 +12,7 @@ class Source(models.Model):
     """
 
     type = models.ForeignKey("SourceType", on_delete=models.PROTECT)
-    label = models.CharField(max_length=255)
+    label = models.CharField(max_length=255, unique=True)
 
     class Meta:
         verbose_name = "источник"
