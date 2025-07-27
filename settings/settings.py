@@ -20,6 +20,7 @@ ALLOWED_HOSTS = ["community.pythonanywhere.com", "knnwork.pythonanywhere.com"]
 
 INSTALLED_APPS = [
     "accounts",
+    "quotes",
     "widget_tweaks",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,7 +28,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "quotes.apps.QuotesConfig",
 ]
 
 MIDDLEWARE = [
