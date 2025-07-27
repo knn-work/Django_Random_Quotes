@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block main %}
@@ -13,34 +14,41 @@
                 ({{ quote.source.type }})</strong>
             </p>
             <p class="mb-3">
-
-
                 Вес цитаты: <strong>{{ quote.weight }}</strong>
             </p>
             <hr />
 
             <div class="d-flex flex-row justify-content-between align-items-center">
 
-                        <div class="btn-group btn-group-sm mr-2" role="group">
-                            <a href="#" id="like-btn" data-url="{% url 'add_like' pk=quote.id %}" onclick="sendLike(event)"
-                               class="btn {% if current_user_vote == 1 %}active{% endif %} btn-outline-primary">
-                                {{ quote.likes }} ❤️
-                            </a>
+                <div class="btn-group btn-group-sm mr-2" role="group">
+                    <!-- Проверяем состояние авторизации -->
+                    {% if request.user.is_authenticated %}
+                        <a href="#" id="like-btn" data-url="{% url 'add_like' pk=quote.id %}" onclick="sendLike(event)"
+                           class="btn {% if current_user_vote == 1 %}active{% endif %} btn-outline-primary">
+                            {{ quote.likes }} ❤️
+                        </a>
 
-                            <a href="#" id="dislike-btn" data-url="{% url 'add_dislike' pk=quote.id %}" onclick="sendDislike(event)"
-                               class="btn {% if current_user_vote == -1 %}active{% endif %} btn-outline-danger">
-                                {{ quote.dislikes }} 💔
-                            </a>
-                        </div>
-                    <p class="mb-3">
-                        👁️‍🗨️ <strong>{{ quote.view_count }}</strong>
-                    </p>
-                    </div>
+                        <a href="#" id="dislike-btn" data-url="{% url 'add_dislike' pk=quote.id %}" onclick="sendDislike(event)"
+                           class="btn {% if current_user_vote == -1 %}active{% endif %} btn-outline-danger">
+                            {{ quote.dislikes }} 💔
+                        </a>
+                    {% else %}
+                        <!-- Если пользователь не залогинился, показываем ссылку на вход -->
+                        <a href="{% url 'login' %}?next={{request.path}}" class="btn btn-link">
+                            Авторизуйтесь, чтобы оценить!
+                        </a>
+                    {% endif %}
                 </div>
-                </div>
+                
+                <p class="mb-3">
+                    👁‍🗨 <strong>{{ quote.view_count }}</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
-
-</section><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function sendLike(event) {
         event.preventDefault();
@@ -58,6 +66,9 @@
                 // Выбираем активный элемент
                 $('.btn.active').removeClass('active'); // Убираем старый active-класс
                 $('#like-btn').addClass('active');      // Ставим новый active-класс
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Ошибка отправки лайка");
             }
         });
     }
@@ -74,13 +85,15 @@
                 // Обновляем счётчики лайков и дизлайков
                 $('#like-btn').text(response['likes'] + ' ❤️');
                 $('#dislike-btn').text(response['dislikes'] + ' 💔');
-
-                // Выбираем активный элемент
+    // Выбираем активный элемент
                 $('.btn.active').removeClass('active'); // Убираем старый active-класс
                 $('#dislike-btn').addClass('active');   // Ставим новый active-класс
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Ошибка отправки дизлайка");
             }
         });
     }
 </script>
-{% endblock main %}
 
+{% endblock main %}
